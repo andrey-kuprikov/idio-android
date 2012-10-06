@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -20,19 +21,15 @@ public class MainActivity extends Activity {
         Bitmap bmp = BitmapFactory.decodeFile("/mnt/sdcard/test.jpg");
         myImageView.setImageBitmap(bmp);
         
-        
+        getUser();
     }
     
     public void getUser() {
-        RestClient.get("/statuses/public_timeline.json", null, new JsonHttpResponseHandler() {
+        RestClient.get("users/testId", null, new JsonHttpResponseHandler<User>(User.class) {
             @Override
-            public void onSuccess(JSONArray response) {
-                // Pull out the first event on the public timeline
-                JSONObject firstEvent = timeline.get(0);
-                String tweetText = firstEvent.getString("text");
-
-                // Do something with the response
-                System.out.println(tweetText);
+            public void onSuccess(User user) {
+            	TextView msg = (TextView) findViewById(R.id.txtMsg);
+            	msg.setText(user.login);
             }
         });
     }

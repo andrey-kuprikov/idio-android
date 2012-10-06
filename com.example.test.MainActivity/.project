@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>libs/android-async-http.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/android-async-http/android-async-http/bin/android-async-http.jar</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

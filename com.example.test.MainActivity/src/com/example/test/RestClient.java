@@ -3,7 +3,7 @@ package com.example.test;
 import com.loopj.android.http.*;
 
 public class RestClient {
-	private static final String BASE_URL = "http://api.twitter.com/1/";
+	private static final String BASE_URL = "http://10.0.2.2:3000/";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();
 

@@ -1,4 +1,5 @@
-INDEX VERSION 1.126+C:\Users\Андрей\Documents\My\idio\source\repo\android\.metadata\.plugins\org.eclipse.jdt.core
+INDEX VERSION 1.126+C:\Users\Андрей\Documents\My\idio\source\idio-android\.metadata\.plugins\org.eclipse.jdt.core
 52108211.index
-2812243808.index
+4233574788.index
 1181964861.index
+1162218665.index
