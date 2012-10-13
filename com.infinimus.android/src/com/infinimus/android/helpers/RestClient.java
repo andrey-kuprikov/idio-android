@@ -1,8 +1,9 @@
-package com.example.test;
+package com.infinimus.android.helpers;
 
 import com.loopj.android.http.*;
 
 public class RestClient {
+	//developer computer localhost is on IP 10.0.2.2
 	private static final String BASE_URL = "http://10.0.2.2:3000/";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();

@@ -22,7 +22,8 @@
 	            android:id="@+id/btnBan"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="--Ban--" />
+	            android:text="--Ban--"
+	            android:onClick="banTrack" />
 		</LinearLayout>
 		
         <LinearLayout
@@ -35,7 +36,8 @@
 	            android:id="@+id/btnLike"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="--Like--" />
+	            android:text="--Like--"
+	            android:onClick="likeTrack" />
 	    </LinearLayout>
 
         <LinearLayout
@@ -48,7 +50,8 @@
 	            android:id="@+id/btnShare"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="--Share--" />
+	            android:text="--Share--"
+	            android:onClick="shareTrack" />
 	    </LinearLayout>
     </LinearLayout>
     
@@ -79,10 +82,11 @@
             android:layout_weight="1"
             android:gravity="center" >
 	        <Button
-	            android:id="@+id/btnBack"
+	            android:id="@+id/btnPrevious"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="&lt;&lt;" />
+	            android:text="&lt;&lt;"
+	            android:onClick="previousTrack" />
 		</LinearLayout>
 		
         <LinearLayout
@@ -94,7 +98,8 @@
 	            android:id="@+id/btnPlay"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="|&gt;" />
+	            android:text="@string/btn_play"
+	            android:onClick="playPauseTrack" />
 	    </LinearLayout>
 
         <LinearLayout
@@ -103,10 +108,11 @@
             android:layout_weight="1"
             android:gravity="center" >
 	        <Button
-	            android:id="@+id/btnForward"
+	            android:id="@+id/btnNext"
 	            android:layout_height="wrap_content"
 	            android:layout_width="wrap_content"
-	            android:text="&gt;&gt;" />
+	            android:text="&gt;&gt;"
+	            android:onClick="nextTrack" />
 	    </LinearLayout>
     </LinearLayout>
 

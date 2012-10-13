@@ -1,4 +1,4 @@
-package com.example.test.helpers;
+package com.infinimus.android.helpers;
 
 import java.io.File;
 import java.io.FileOutputStream;

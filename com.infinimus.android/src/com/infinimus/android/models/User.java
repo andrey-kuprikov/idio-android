@@ -1,4 +1,4 @@
-package com.example.test;
+package com.infinimus.android.models;
 
 public class User {
 	public String login;
