@@ -6,11 +6,14 @@ import com.infinimus.android.helpers.RestClient;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -104,6 +107,40 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()) {
+        // Start the WebViewActivity to handle the authentication.
+        case R.id.login:
+          Intent intent = new Intent(this, WebViewActivity.class);
+          intent.setData(Uri.parse(YOUR_AUTHENTICATION_ENDPOINT));
+          startActivityForResult(intent, 0);
+          return true;
+        // Exit.
+        case R.id.exit:
+          finish();
+          return true;
+      }
+      return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch (requestCode) {
+    		case 0:
+    			if (resultCode != RESULT_OK || data == null) {
+    				return;
+    			}
+    			// Get the token.
+    			String token = data.getStringExtra("token");
+    			if (token != null) {
+    				/* Use the token to access data */
+    			}
+    			return;
+    	}
+    	super.onActivityResult(requestCode, resultCode, data);
+	}
     
     private void log(String msg){
     	TextView view = (TextView) findViewById(R.id.txtMsg);
