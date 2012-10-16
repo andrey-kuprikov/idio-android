@@ -23,9 +23,20 @@ import android.widget.TextView;
 
 //this is controller class of MVC pattern
 public class MainActivity extends Activity implements OnSeekBarChangeListener {
-
+	private String _sessionId = null;
+	public String getSessionId(){
+		return _sessionId;
+	}
+	public void setSessionId(String sessionId){
+		_sessionId = sessionId; 
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	if (getSessionId() == null){
+    		showLoginActivity();
+    	}
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -94,7 +105,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     
     
     public void getUser() {
-        RestClient.get("users/testId", null, new JsonHttpResponseHandler<User>(User.class) {
+        RestClient.get("users/test", null, new JsonHttpResponseHandler<User>(User.class) {
             @Override
             public void onSuccess(User user) {
             	log(user.login);
@@ -108,19 +119,23 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         return true;
     }
     
+    public void showLoginActivity(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        //intent.setData(Uri.parse(YOUR_AUTHENTICATION_ENDPOINT));
+        startActivityForResult(intent, 0);
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
       switch (item.getItemId()) {
         // Start the WebViewActivity to handle the authentication.
         case R.id.login:
-          Intent intent = new Intent(this, WebViewActivity.class);
-          intent.setData(Uri.parse(YOUR_AUTHENTICATION_ENDPOINT));
-          startActivityForResult(intent, 0);
-          return true;
+        	showLoginActivity();
+        	return true;
         // Exit.
         case R.id.exit:
-          finish();
-          return true;
+        	finish();
+        	return true;
       }
       return super.onOptionsItemSelected(item);
     }
@@ -133,10 +148,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     				return;
     			}
     			// Get the token.
-    			String token = data.getStringExtra("token");
-    			if (token != null) {
-    				/* Use the token to access data */
-    			}
+    			setSessionId(data.getStringExtra("sessionId"));
     			return;
     	}
     	super.onActivityResult(requestCode, resultCode, data);
