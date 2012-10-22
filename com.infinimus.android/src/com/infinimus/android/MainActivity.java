@@ -3,10 +3,10 @@ package com.infinimus.android;
 
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
+import com.infinimus.android.models.Session;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,17 +23,17 @@ import android.widget.TextView;
 
 //this is controller class of MVC pattern
 public class MainActivity extends Activity implements OnSeekBarChangeListener {
-	private String _sessionId = null;
-	public String getSessionId(){
-		return _sessionId;
+	private User _user = null;
+	public User getUser(){
+		return _user;
 	}
-	public void setSessionId(String sessionId){
-		_sessionId = sessionId; 
+	public void setUser(User user){
+		_user = user; 
 	}
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	if (getSessionId() == null){
+    	if (getUser() == null){
     		showLoginActivity();
     	}
     	
@@ -44,8 +44,6 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         setImg(bmp);
         SeekBar bar = (SeekBar) findViewById(R.id.seekTime);
         bar.setOnSeekBarChangeListener(this);
-        
-        getUser();
     }
     
     public void banTrack(View view) {
@@ -103,16 +101,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     	log("method onStopTrackingTouch not implemented");
     }
     
-    
-    public void getUser() {
-        RestClient.get("users/test", null, new JsonHttpResponseHandler<User>(User.class) {
-            @Override
-            public void onSuccess(User user) {
-            	log(user.login);
-            }
-        });
-    }
-    
+        
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
@@ -148,7 +137,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     				return;
     			}
     			// Get the token.
-    			setSessionId(data.getStringExtra("sessionId"));
+    			setUser((User)data.getParcelableExtra("User"));
     			return;
     	}
     	super.onActivityResult(requestCode, resultCode, data);

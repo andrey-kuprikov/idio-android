@@ -27,4 +27,11 @@ public class StringUtil {
 	    }
 	    return "";
 	}
+	
+	public static final boolean isNullOrEmpty(String s){
+		if (s == null || s == "")
+			return true;
+		
+		return false;
+	}
 }
