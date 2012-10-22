@@ -3,7 +3,6 @@ package com.infinimus.android;
 
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
-import com.infinimus.android.models.Session;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -138,6 +137,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     			}
     			// Get the token.
     			setUser((User)data.getParcelableExtra("User"));
+    			log(getUser().login + ":" + getUser().name + ":" + getUser().sessionId + ":" + getUser()._id);
     			return;
     	}
     	super.onActivityResult(requestCode, resultCode, data);

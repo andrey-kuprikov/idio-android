@@ -3,7 +3,6 @@ package com.infinimus.android;
 import java.util.UUID;
 
 import com.infinimus.android.helpers.StringUtil;
-import com.infinimus.android.models.Session;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import android.app.Activity;
