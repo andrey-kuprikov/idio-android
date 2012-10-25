@@ -3,6 +3,7 @@ package com.infinimus.android;
 
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
+import com.infinimus.android.models.Playlist;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -32,6 +33,8 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	init();
+    	
     	if (getUser() == null){
     		showLoginActivity();
     	}
@@ -43,6 +46,21 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         setImg(bmp);
         SeekBar bar = (SeekBar) findViewById(R.id.seekTime);
         bar.setOnSeekBarChangeListener(this);
+    }
+    
+    public void init(){
+    	RestClient.initCookieStore(this);
+    }
+    
+    //Fires after authentication
+    public void onAuthenticated()
+    {
+    	Playlist p = new Playlist();
+    	p.load(new JsonHttpResponseHandler<Playlist>(Playlist.class){
+			public void onSuccess(Playlist p) {
+				log(String.valueOf(p.items.length) + p.id);
+	    	}
+    	});
     }
     
     public void banTrack(View view) {
@@ -137,6 +155,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     			}
     			// Get the token.
     			setUser((User)data.getParcelableExtra("User"));
+    			onAuthenticated();
     			log(getUser().login + ":" + getUser().name + ":" + getUser().sessionId + ":" + getUser()._id);
     			return;
     	}
