@@ -15,18 +15,21 @@ public class User implements Parcelable {
 	public String name;
 	public String sessionId;
 	
-	public User(){
-		
+	public User() {}
+	
+	public static void load(String login, JsonHttpResponseHandler<User> handler) {
+		load(login, null, handler);
 	}
 	
-	public void load(String login, String password, JsonHttpResponseHandler<User> handler){
+	public static void load(String login, String password, JsonHttpResponseHandler<User> handler) {
 		RequestParams params = new RequestParams();
 		params.put("login", login);
-		params.put("passwordHash", StringUtil.md5(password));
+		if (password != null)
+			params.put("passwordHash", StringUtil.md5(password));
 		RestClient.get("/users/", params, handler);
 	}
 	
-	public void save(JsonHttpResponseHandler<User> handler){
+	public void save(JsonHttpResponseHandler<User> handler) {
 		RequestParams params = new RequestParams();
 		Gson g = new Gson();
 		params.put(g.toJson(this));

@@ -30,6 +30,10 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	public void setUser(User user){
 		_user = user; 
 	}
+
+	public Playlist localTracks;
+	public Playlist actionStat;
+	public Playlist playQueue;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +59,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     //Fires after authentication
     public void onAuthenticated()
     {
-    	Playlist p = new Playlist();
-    	p.load(new JsonHttpResponseHandler<Playlist>(Playlist.class){
+    	Playlist.load(new JsonHttpResponseHandler<Playlist>(Playlist.class){
 			public void onSuccess(Playlist p) {
 				log(String.valueOf(p.items.length) + p.id);
 	    	}

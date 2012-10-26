@@ -1,8 +1,5 @@
 package com.infinimus.android;
 
-import java.util.UUID;
-
-import com.infinimus.android.helpers.StringUtil;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import android.app.Activity;
@@ -29,9 +26,7 @@ public class LoginActivity extends Activity {
 		TextView txtLogin = (TextView) findViewById(R.id.txtLogin);
 		TextView txtPassword = (TextView) findViewById(R.id.txtPassword);
 		
-		User user = new User();
-		
-		user.load(String.valueOf(txtLogin.getText()),
+		User.load(String.valueOf(txtLogin.getText()),
 				String.valueOf(txtPassword.getText()),
 				new JsonHttpResponseHandler<User>(User.class){
 					public void onSuccess(User user) {
