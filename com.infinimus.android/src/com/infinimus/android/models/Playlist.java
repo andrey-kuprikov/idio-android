@@ -1,6 +1,7 @@
 package com.infinimus.android.models;
 
 import com.google.gson.Gson;
+import com.infinimus.android.helpers.FSClient;
 import com.infinimus.android.helpers.RestClient;
 import com.infinimus.android.helpers.StringUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -13,6 +14,10 @@ public class Playlist {
 	
 	public static void load(JsonHttpResponseHandler<Playlist> handler){
 		RestClient.get("/playlists/", null, handler);
+	}
+	
+	public static void loadLocal(String path, FSClient<Playlist> task){
+		task.execute(path);
 	}
 	
 	public void save(JsonHttpResponseHandler<Playlist> handler){
