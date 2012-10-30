@@ -4,6 +4,7 @@ package com.infinimus.android;
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
 import com.infinimus.android.models.Playlist;
+import com.infinimus.android.models.Tracklist;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,9 +32,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		_user = user; 
 	}
 
-	public Playlist localTracks;
-	public Playlist actionStat;
-	public Playlist playQueue;
+	public Tracklist localTracks;
+	public Tracklist actionStat;
+	public Tracklist playQueue;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
