@@ -1,16 +1,25 @@
 package com.infinimus.android;
 
 
+import java.io.File;
+
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
+import com.infinimus.android.helpers.Serializator;
+import com.infinimus.android.models.LocalTracklist;
+import com.infinimus.android.models.PlayStat;
 import com.infinimus.android.models.Playlist;
+import com.infinimus.android.models.Track;
 import com.infinimus.android.models.Tracklist;
 import com.infinimus.android.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Menu;
@@ -32,9 +41,9 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 		_user = user; 
 	}
 
-	public Tracklist localTracks;
-	public Tracklist actionStat;
-	public Tracklist playQueue;
+	public LocalTracklist tracks;
+	public PlayStat stat;
+	public Playlist playlist;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,46 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         setImg(bmp);
         SeekBar bar = (SeekBar) findViewById(R.id.seekTime);
         bar.setOnSeekBarChangeListener(this);
+        
+        //TODO: Check if media storage ready (http://developer.android.com/guide/topics/data/data-storage.html)
+        SharedPreferences settings = getPreferences(0);
+        String rootPath = settings.getString("dataPath", "");
+        if (rootPath == null || rootPath == ""){
+        	rootPath = getExternalFilesDir(null).getAbsolutePath();
+        	SharedPreferences.Editor editor = settings.edit();
+        	editor.putString("dataPath", rootPath);
+        	editor.commit();
+        }
+
+        String tracksFile = rootPath + "/tracks.json";
+        File f = new File(tracksFile);
+        if (!f.exists()){
+        	tracks = new LocalTracklist();
+        	Track t = new Track();
+        	t.artist_id = "f";
+        	t.artist_name = "madonna";
+        	t.foreign_id = "sdfsdfsd";
+        	t.play_count = 10;
+        	t.song_name = "Sorry";
+        	tracks.items.add(t);
+        	tracks.save(tracksFile, new Handler(){
+        		@Override
+        		public void handleMessage(Message msg) {
+        			log("FFF");
+        			super.handleMessage(msg);
+        		}
+        	});
+        }
+        else{
+	        //Loading local track list database
+	        LocalTracklist.load(tracksFile, new Handler(){
+				@Override
+				public void handleMessage(Message msg) {
+					tracks = (LocalTracklist)msg.obj;
+					super.handleMessage(msg);
+				}
+			});
+        }
     }
     
     public void init(){
@@ -62,7 +111,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     {
     	Playlist.load(new JsonHttpResponseHandler<Playlist>(Playlist.class){
 			public void onSuccess(Playlist p) {
-				log(String.valueOf(p.items.length) + p.id);
+				log(String.valueOf(p.items.size()) + p.id);
 	    	}
     	});
     }
