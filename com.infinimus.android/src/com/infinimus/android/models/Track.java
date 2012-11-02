@@ -6,4 +6,5 @@ public class Track {
 	public String song_name;
 	public int play_count;
 	public String foreign_id;
+	public String url;
 }

@@ -63,34 +63,14 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         SeekBar bar = (SeekBar) findViewById(R.id.seekTime);
         bar.setOnSeekBarChangeListener(this);
         
-        //TODO: Check if media storage ready (http://developer.android.com/guide/topics/data/data-storage.html)
-        SharedPreferences settings = getPreferences(0);
-        String rootPath = settings.getString("dataPath", "");
-        if (rootPath == null || rootPath == ""){
-        	rootPath = getExternalFilesDir(null).getAbsolutePath();
-        	SharedPreferences.Editor editor = settings.edit();
-        	editor.putString("dataPath", rootPath);
-        	editor.commit();
-        }
+        InitLocalTracklist();
+    }
 
-        String tracksFile = rootPath + "/tracks.json";
+    private void InitLocalTracklist(){
+        String tracksFile = getAppRootFolder() + "/tracks.json";
         File f = new File(tracksFile);
         if (!f.exists()){
         	tracks = new LocalTracklist();
-        	Track t = new Track();
-        	t.artist_id = "f";
-        	t.artist_name = "madonna";
-        	t.foreign_id = "sdfsdfsd";
-        	t.play_count = 10;
-        	t.song_name = "Sorry";
-        	tracks.items.add(t);
-        	tracks.save(tracksFile, new Handler(){
-        		@Override
-        		public void handleMessage(Message msg) {
-        			log("FFF");
-        			super.handleMessage(msg);
-        		}
-        	});
         }
         else{
 	        //Loading local track list database
@@ -104,6 +84,19 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
         }
     }
     
+    private String getAppRootFolder(){
+        //TODO: Check if media storage ready (http://developer.android.com/guide/topics/data/data-storage.html)
+        SharedPreferences settings = getPreferences(0);
+        String rootPath = settings.getString("dataPath", "");
+        if (rootPath == null || rootPath == ""){
+        	rootPath = getExternalFilesDir(null).getAbsolutePath();
+        	SharedPreferences.Editor editor = settings.edit();
+        	editor.putString("dataPath", rootPath);
+        	editor.commit();
+        }
+        return rootPath;
+    }
+    
     public void init(){
     	RestClient.initCookieStore(this);
     }
@@ -114,10 +107,10 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     	Playlist.load(new JsonHttpResponseHandler<Playlist>(Playlist.class){
 			public void onSuccess(Playlist p) {
 				log(String.valueOf(p.items.size()) + p.id);
-	    	}
+				playlist = p;
+				Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE));
+			}
     	});
-    	
-    	Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE));
     }
     
     public void banTrack(View view) {

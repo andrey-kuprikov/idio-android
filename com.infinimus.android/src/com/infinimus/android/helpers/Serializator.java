@@ -54,7 +54,7 @@ public class Serializator <T> {
 		}
 		catch (IOException e) {
 		    return null;
-		}		
+		}
 		
 		Gson g = new Gson();
 		result = g.fromJson(data.toString(), resultType);
