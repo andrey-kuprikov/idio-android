@@ -6,6 +6,7 @@ import java.io.File;
 import com.infinimus.android.R;
 import com.infinimus.android.helpers.RestClient;
 import com.infinimus.android.helpers.Serializator;
+import com.infinimus.android.helpers.Synchronizator;
 import com.infinimus.android.models.LocalTracklist;
 import com.infinimus.android.models.PlayStat;
 import com.infinimus.android.models.Playlist;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -114,6 +116,8 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 				log(String.valueOf(p.items.size()) + p.id);
 	    	}
     	});
+    	
+    	Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE));
     }
     
     public void banTrack(View view) {

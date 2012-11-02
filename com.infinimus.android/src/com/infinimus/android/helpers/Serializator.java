@@ -88,6 +88,6 @@ public class Serializator <T> {
 		catch (IOException e) {
 			String a = e.getMessage();
 			a = a + e.toString();
-		}		
+		}
     }
 }
