@@ -4,6 +4,7 @@ package com.infinimus.android;
 import java.io.File;
 
 import com.infinimus.android.R;
+import com.infinimus.android.helpers.Player;
 import com.infinimus.android.helpers.RestClient;
 import com.infinimus.android.helpers.Serializator;
 import com.infinimus.android.helpers.Synchronizator;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 	}
 
 	public LocalTracklist tracks;
+	public int playingTrackInd = 0;
 	public PlayStat stat;
 	public Playlist playlist;
 	
@@ -108,7 +110,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
 			public void onSuccess(Playlist p) {
 				log(String.valueOf(p.items.size()) + p.id);
 				playlist = p;
-				Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE));
+				Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE), getAppRootFolder());
 			}
     	});
     }
@@ -141,16 +143,25 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     	isPlaying = true;
     	Button btn = (Button) findViewById(R.id.btnPlay);
 		btn.setText(R.string.btn_pause);
+		
+		if (!Player.Resume()){
+			PlayCurrentTrack();
+		}
     }
     public void pauseTrack(View view) {
     	log("method pauseTrack not implemented");
     	isPlaying = false;
     	Button btn = (Button) findViewById(R.id.btnPlay);
 		btn.setText(R.string.btn_play);
+		
+		Player.Pause();
     }
     
     public void nextTrack(View view) {
     	log("method nextTrack not implemented");
+    	
+    	playingTrackInd++;
+		PlayCurrentTrack();
     }
     
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
@@ -166,6 +177,20 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     public void onStopTrackingTouch(SeekBar seekBar)
     {
     	log("method onStopTrackingTouch not implemented");
+    }
+    
+    public void PlayCurrentTrack() {
+		if (playingTrackInd < tracks.items.size()){
+			try{
+				Player.Play(getApplicationContext(), tracks.items.get(playingTrackInd), getAppRootFolder());
+			}
+			catch (Exception ex){
+				log(ex.toString());
+			}
+		}
+		else {
+			log("nothing to play");
+		}
     }
     
         

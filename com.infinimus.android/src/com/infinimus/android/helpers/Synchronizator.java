@@ -12,13 +12,13 @@ import com.loopj.android.http.RequestParams;
 
 public class Synchronizator {
 	
-	public static void Sync(LocalTracklist local, Playlist remote, final DownloadManager dm){
+	public static void Sync(LocalTracklist local, Playlist remote, final DownloadManager dm, final String rootPath){
 		for (int i = 0; i < remote.items.size(); ++i) {
-			SyncOne(local, remote.items.get(i), dm);
+			SyncOne(local, remote.items.get(i), dm, rootPath);
 		}
 	}
 	
-	private static void SyncOne(LocalTracklist local, Track target, final DownloadManager dm) {
+	private static void SyncOne(final LocalTracklist local, Track target, final DownloadManager dm, final String rootPath) {
 		RequestParams params = new RequestParams();
 		params.put("artistName", target.artist_name);
 		params.put("trackName", target.song_name);
@@ -32,12 +32,16 @@ public class Synchronizator {
 				   .setAllowedOverRoaming(false)
 				   .setTitle(t.artist_name + " - " + t.song_name)
 				   .setDescription("Syncing media library...")
-				   .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
-				                                      t.artist_name+"-"+t.song_name + ".mp3");
+				   .setDestinationUri(getTrackUri(t, rootPath));
 			
 				dm.enqueue(req);
+				local.items.add(t);
 				super.onSuccess(t);
 			}
 		});
+	}
+	
+	public static Uri getTrackUri(Track t, String rootPath){
+		return Uri.parse(rootPath + "/tracks/" + t.artist_name.toLowerCase() + "-" + t.song_name.toLowerCase() + ".mp3");
 	}
 }
