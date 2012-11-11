@@ -1,5 +1,7 @@
 package com.infinimus.android.helpers;
 
+import java.io.File;
+
 import android.app.DownloadManager;
 import android.net.Uri;
 import android.os.Environment;
@@ -26,15 +28,18 @@ public class Synchronizator {
 		RestClient.get("/track/", params, new JsonHttpResponseHandler<Track>(Track.class){
 			@Override
 			public void onSuccess(Track t) {
-				DownloadManager.Request req=new DownloadManager.Request(Uri.parse(t.url));
-
-				req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
-				   .setAllowedOverRoaming(false)
-				   .setTitle(t.artist_name + " - " + t.song_name)
-				   .setDescription("Syncing media library...")
-				   .setDestinationUri(getTrackUri(t, rootPath));
-			
-				dm.enqueue(req);
+				File f = new File(getTrackUri(t, rootPath).getPath());
+				if (!f.exists()){
+					DownloadManager.Request req=new DownloadManager.Request(Uri.parse(t.url));
+	
+					req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
+					   .setAllowedOverRoaming(false)
+					   .setTitle(t.artist_name + " - " + t.song_name)
+					   .setDescription("Syncing media library...")
+					   .setDestinationUri(getTrackUri(t, rootPath));
+				
+					dm.enqueue(req);
+				}
 				local.items.add(t);
 				super.onSuccess(t);
 			}
@@ -42,6 +47,11 @@ public class Synchronizator {
 	}
 	
 	public static Uri getTrackUri(Track t, String rootPath){
-		return Uri.parse(rootPath + "/tracks/" + t.artist_name.toLowerCase() + "-" + t.song_name.toLowerCase() + ".mp3");
+		File folder = new File(rootPath + "/tracks/");
+		if (!folder.exists()){
+			folder.mkdirs();
+		}
+		String fileName = StringUtil.md5(t.artist_name.toLowerCase() + "-" + t.song_name.toLowerCase());
+		return Uri.parse("file://" + folder.getAbsolutePath() + "/" + fileName + ".mp3");
 	}
 }

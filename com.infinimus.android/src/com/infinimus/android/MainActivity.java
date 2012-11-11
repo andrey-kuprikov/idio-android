@@ -127,8 +127,15 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener {
     	log("method shareTrack not implemented");
     }
     
-    public void previousTrack(View view) {
-    	log("method previousTrack not implemented");
+    public void refreshMedia(View view) {
+    	log("method refreshMedia");
+    	Playlist.update(new JsonHttpResponseHandler<Playlist>(Playlist.class){
+			public void onSuccess(Playlist p) {
+				log(String.valueOf(p.items.size()) + p.id);
+				playlist = p;
+				Synchronizator.Sync(tracks, playlist, (DownloadManager)getSystemService(DOWNLOAD_SERVICE), getAppRootFolder());
+			}
+    	});
     }
     
     private boolean isPlaying = false;

@@ -12,6 +12,19 @@ public class Playlist extends Tracklist {
 		RestClient.get("/playlists/", null, handler);
 	}
 
+	public static void update(final JsonHttpResponseHandler<Playlist> handler){
+		RestClient.put("/playlists/", null, new JsonHttpResponseHandler<Playlist>(Playlist.class){
+			public void onSuccess(Playlist p) {
+				//waiting for update processing in echonest
+				try{
+					Thread.sleep(10000);
+				}
+				catch (Exception ex) {}
+				RestClient.get("/playlists/", null, handler);		
+			}
+		});
+	}
+
 	public void save(JsonHttpResponseHandler<Playlist> handler){
 		RequestParams params = new RequestParams();
 		Gson g = new Gson();
